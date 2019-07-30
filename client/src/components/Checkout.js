@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react";
 
 class Checkout extends React.Component {
-  state = {  }
-  render() { 
-    return ( <div>Checkout</div> );
+  render() {
+    return <div>Checkout</div>;
   }
 }
- 
+
 export default Checkout;

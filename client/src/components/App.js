@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-//prettier-ignore
-import { Container, Box,Heading, Card, Image, Text, SearchField, Icon } from "gestalt";
+// prettier-ignore
+import { Container, Box, Heading, Card, Image, Text, SearchField, Icon } from "gestalt";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
 import "./App.css";
@@ -14,9 +14,10 @@ class App extends Component {
     searchTerm: "",
     loadingBrands: true
   };
+
   async componentDidMount() {
     try {
-      const { data } = await strapi.request("POST", "/graphql", {
+      const response = await strapi.request("POST", "/graphql", {
         data: {
           query: `query {
             brands {
@@ -30,11 +31,10 @@ class App extends Component {
           }`
         }
       });
-      setTimeout(() => {
-        this.setState({ brands: data.brands, loadingBrands: false });
-      }, 1000);
-    } catch (error) {
-      console.error(error);
+      // console.log(response);
+      this.setState({ brands: response.data.brands, loadingBrands: false });
+    } catch (err) {
+      console.error(err);
       this.setState({ loadingBrands: false });
     }
   }
@@ -54,18 +54,18 @@ class App extends Component {
 
   render() {
     const { searchTerm, loadingBrands } = this.state;
+
     return (
       <Container>
-        {/* Brand Search Field */}
+        {/* Brands Search Field */}
         <Box display="flex" justifyContent="center" marginTop={4}>
           <SearchField
             id="searchField"
             accessibilityLabel="Brands Search Field"
-            placeholder="Search Brands"
             onChange={this.handleChange}
             value={searchTerm}
+            placeholder="Search Brands"
           />
-
           <Box margin={3}>
             <Icon
               icon="filter"
@@ -76,51 +76,43 @@ class App extends Component {
           </Box>
         </Box>
 
-        {/* Brand Section */}
+        {/* Brands Section */}
         <Box display="flex" justifyContent="center" marginBottom={2}>
           {/* Brands Header */}
           <Heading color="midnight" size="md">
-            Brew Bands
+            Brew Brands
           </Heading>
         </Box>
         {/* Brands */}
-
-        {/*<Spinner show={loadingBrands} accessibilityLabel="Loading Spinner" /> */}
         <Box
           dangerouslySetInlineStyle={{
             __style: {
               backgroundColor: "#d6c8ec"
             }
           }}
+          shape="rounded"
           wrap
           display="flex"
           justifyContent="around"
-          shape="rounded"
         >
           {this.filteredBrands(this.state).map(brand => (
-            <Box
-              paddingY={4}
-              margin={2}
-              key={brand._id}
-              width={200}
-              maxWidth={236}
-              padding={2}
-              column={12}
-            >
+            <Box paddingY={4} margin={2} width={200} key={brand._id}>
               <Card
                 image={
-                  <Image
-                    alt={brand.name}
-                    naturalHeight={1}
-                    naturalWidth={1}
-                    src={`${apiUrl}${brand.image.url}`}
-                  />
+                  <Box height={200} width={200}>
+                    <Image
+                      fit="cover"
+                      alt="Brand"
+                      naturalHeight={1}
+                      naturalWidth={1}
+                      src={`${apiUrl}${brand.image.url}`}
+                    />
+                  </Box>
                 }
               >
                 <Box
                   display="flex"
                   alignItems="center"
-                  alignContent="center"
                   justifyContent="center"
                   direction="column"
                 >
@@ -129,14 +121,15 @@ class App extends Component {
                   </Text>
                   <Text>{brand.description}</Text>
                   <Text bold size="xl">
-                    <Link to={`${brand._id}`}>See Brews</Link>
+                    <Link to={`/${brand._id}`}>See Brews</Link>
                   </Text>
                 </Box>
               </Card>
             </Box>
           ))}
-          <Loader show={loadingBrands} />
         </Box>
+        {/* <Spinner show={loadingBrands} accessibilityLabel="Loading Spinner" /> */}
+        <Loader show={loadingBrands} />
       </Container>
     );
   }
