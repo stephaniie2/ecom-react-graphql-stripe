@@ -3,10 +3,17 @@ const TOKEN_KEY = "jwt";
 
 export const calculatePrice = items => {
   return `$${items
-    .reduce((acc, item) => acc + item.quanity * item.price, 0)
+    .reduce((acc, item) => acc + item.quantity * item.price, 0)
     .toFixed(2)}`;
 };
 
+export const calculateAmount = items => {
+  return Number(
+    items.reduce((acc, item) => acc + item.quantity * item.price, 0).toFixed(2)
+  );
+};
+
+/* Cart */
 export const setCart = (value, cartKey = CART_KEY) => {
   if (localStorage) {
     localStorage.setItem(cartKey, JSON.stringify(value));

@@ -4,24 +4,22 @@ import { getToken, clearToken, clearCart } from "../utils";
 import { NavLink, withRouter } from "react-router-dom";
 
 class Navbar extends React.Component {
-  handleSignOut = () => {
-    // clear token
+  handleSignout = () => {
     clearToken();
-    // clear cart
     clearCart();
-    // redirect home
     this.props.history.push("/");
   };
+
   render() {
     return getToken() !== null ? (
-      <AuthNav handleSignOut={this.handleSignOut} />
+      <AuthNav handleSignout={this.handleSignout} />
     ) : (
       <UnAuthNav />
     );
   }
 }
 
-const AuthNav = ({ handleSignOut }) => (
+const AuthNav = ({ handleSignout }) => (
   <Box
     display="flex"
     alignItems="center"
@@ -50,14 +48,14 @@ const AuthNav = ({ handleSignOut }) => (
           />
         </Box>
         <Heading size="xs" color="orange">
-          Brew
+          BrewHaha
         </Heading>
       </Box>
     </NavLink>
 
     {/* Signout Button */}
     <Button
-      onClick={handleSignOut}
+      onClick={handleSignout}
       color="transparent"
       text="Sign Out"
       inline
@@ -95,7 +93,7 @@ const UnAuthNav = () => (
           />
         </Box>
         <Heading size="xs" color="orange">
-          Brew
+          BrewHaha
         </Heading>
       </Box>
     </NavLink>
